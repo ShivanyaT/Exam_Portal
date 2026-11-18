@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Search results for "{{ q }}"</h2>
+
+{% if found %}
+<h5>Students</h5>
+<table class="table table-bordered">
+  {% for u in found.students %}<tr><td>{{ u.id }}</td><td>{{ u.name }}</td><td>{{ u.email }}</td></tr>
+  {% else %}<tr><td>Nothing found.</td></tr>{% endfor %}
+</table>
+
+<h5>Examiners</h5>
+<table class="table table-bordered">
+  {% for u in found.examiners %}<tr><td>{{ u.id }}</td><td>{{ u.name }}</td><td>{{ u.status }}</td></tr>
+  {% else %}<tr><td>Nothing found.</td></tr>{% endfor %}
+</table>
+
+<h5>Examinations</h5>
+<table class="table table-bordered">
+  {% for e in found.exams %}<tr><td>{{ e.id }}</td><td>{{ e.name }}</td><td>{{ e.course.code }}</td><td>{{ e.status }}</td></tr>
+  {% else %}<tr><td>Nothing found.</td></tr>{% endfor %}
+</table>
+
+<h5>Bookings</h5>
+<table class="table table-bordered">
+  {% for b in found.bookings %}<tr><td>{{ b.id }}</td><td>{{ b.student.name }}</td><td>{{ b.exam.name }}</td><td>{{ b.status }}</td></tr>
+  {% else %}<tr><td>Nothing found.</td></tr>{% endfor %}
+</table>
+{% endif %}
+{% endblock %}

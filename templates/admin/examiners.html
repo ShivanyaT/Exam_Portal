@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Examiners</h2>
+<table class="table table-bordered">
+  <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Department</th><th>Status</th><th>Action</th></tr>
+  {% for u in examiners %}
+  <tr>
+    <td>{{ u.id }}</td><td>{{ u.name }}</td><td>{{ u.email }}</td><td>{{ u.phone }}</td>
+    <td>{{ u.department }}</td><td><span class="tag">{{ u.status }}</span></td>
+    <td>
+      <form method="post" action="{{ url_for('admin.examiner_status', id=u.id) }}">
+        {% if u.status != 'Approved' %}
+          <button class="btn btn-sm" name="status" value="Approved">Approve</button>
+        {% endif %}
+        {% if u.status != 'Deactivated' %}
+          <button class="btn btn-sm btn-danger" name="status" value="Deactivated">Deactivate</button>
+        {% endif %}
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="7">No examiners yet.</td></tr>
+  {% endfor %}
+</table>
+
+<h5>Add an examiner (approved straight away)</h5>
+<form method="post" action="{{ url_for('admin.examiner_add') }}" class="row g-2">
+  <div class="col-md-3"><input class="form-control" name="name" placeholder="Full name" required></div>
+  <div class="col-md-3"><input class="form-control" type="email" name="email" placeholder="Email" required></div>
+  <div class="col-md-2"><input class="form-control" type="password" name="password" placeholder="Password" minlength="4" required></div>
+  <div class="col-md-2"><input class="form-control" name="phone" placeholder="Phone"></div>
+  <div class="col-md-2"><input class="form-control" name="department" placeholder="Department"></div>
+  <div class="col-12"><button class="btn">Add examiner</button></div>
+</form>
+{% endblock %}

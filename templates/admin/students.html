@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Students</h2>
+<table class="table table-bordered">
+  <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Department</th></tr>
+  {% for u in students %}
+  <tr><td>{{ u.id }}</td><td>{{ u.name }}</td><td>{{ u.email }}</td><td>{{ u.phone }}</td><td>{{ u.department }}</td></tr>
+  {% else %}
+  <tr><td colspan="5">No students yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

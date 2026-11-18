@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ 'Edit' if slot else 'New' }} Slot</h2>
+
+{% if not slot and not exams %}
+  <p>Slot creation is not open for any of your examinations right now.</p>
+{% else %}
+<form method="post" class="col-md-6">
+  <label>Examination</label>
+  {% if slot %}
+    <input class="form-control mb-2" value="{{ slot.exam.name }}" disabled>
+  {% else %}
+    <select class="form-select mb-2" name="exam_id" required>
+      {% for e in exams %}<option value="{{ e.id }}">{{ e.name }}</option>{% endfor %}
+    </select>
+  {% endif %}
+  <label>Date</label>
+  <input class="form-control mb-2" type="date" name="slot_date" value="{{ slot.slot_date if slot }}" required>
+  <label>Start time</label>
+  <input class="form-control mb-2" type="time" name="start_time" value="{{ slot.start_time if slot }}" required>
+  <label>End time</label>
+  <input class="form-control mb-2" type="time" name="end_time" value="{{ slot.end_time if slot }}" required>
+  <label>Maximum students</label>
+  <input class="form-control mb-3" type="number" min="1" name="capacity" value="{{ slot.capacity if slot }}" required>
+  <button class="btn">Save</button>
+  <a class="btn" href="{{ url_for('examiner.dashboard') }}">Cancel</a>
+</form>
+{% endif %}
+{% endblock %}

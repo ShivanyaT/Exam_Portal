@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Evaluate: {{ booking.student.name }}</h2>
+<p>{{ booking.exam.name }} (maximum {{ booking.exam.max_marks }} marks)</p>
+
+{% if not rubrics %}
+  <p>This examination has no rubric criteria yet. Ask the Admin to add them.</p>
+{% else %}
+<form method="post" class="col-md-8">
+  <table class="table table-bordered">
+    <tr><th>Criterion</th><th>Max</th><th>Awarded marks</th></tr>
+    {% for r in rubrics %}
+    <tr>
+      <td>{{ r.name }}<br><small>{{ r.description }}</small></td>
+      <td>{{ r.max_marks }}</td>
+      <td><input class="form-control" type="number" step="0.5" min="0" max="{{ r.max_marks }}"
+                 name="marks_{{ r.id }}" value="{{ old.get(r.id, '') }}" required></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <label>Remarks</label>
+  <textarea class="form-control mb-3" name="remarks" rows="3">{{ booking.remarks or '' }}</textarea>
+  <button class="btn">Submit</button>
+  <a class="btn" href="{{ url_for('examiner.slot_students', id=booking.slot_id) }}">Cancel</a>
+</form>
+{% endif %}
+{% endblock %}

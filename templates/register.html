@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Register</h2>
+<form method="post" class="col-md-6">
+  <label>Email</label>
+  <input class="form-control mb-2" type="email" name="email" required>
+  <label>Password (min 4 characters)</label>
+  <input class="form-control mb-2" type="password" name="password" minlength="4" required>
+  <label>Full name</label>
+  <input class="form-control mb-2" name="name" required>
+  <label>I am a</label><br>
+  <input type="radio" name="role" value="student" checked> Student
+  <input type="radio" name="role" value="examiner" class="ms-3"> Examiner (needs Admin approval)<br>
+  <label class="mt-2">Phone</label>
+  <input class="form-control mb-2" name="phone" pattern="[0-9]{10}" title="10 digit number" required>
+  <label>Department</label>
+  <input class="form-control mb-3" name="department" required>
+  <button class="btn">Sign up</button>
+  <a class="ms-3" href="{{ url_for('auth.login') }}">Existing user? Login</a>
+</form>
+{% endblock %}

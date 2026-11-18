@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>All Bookings</h2>
+<table class="table table-bordered">
+  <tr><th>ID</th><th>Student</th><th>Exam</th><th>Slot</th><th>Booked on</th><th>Status</th><th>Action</th></tr>
+  {% for b in bookings %}
+  <tr>
+    <td>{{ b.id }}</td><td>{{ b.student.name }}</td><td>{{ b.exam.name }}</td>
+    <td>#{{ b.slot_id }} - {{ b.slot.slot_date }} {{ b.slot.start_time }}</td>
+    <td>{{ b.booking_date }}</td><td>{{ b.status }}</td>
+    <td>
+      {% if b.status == 'Booked' %}
+      <a class="btn btn-sm" href="{{ url_for('admin.reschedule', id=b.id) }}">Reschedule</a>
+      {% endif %}
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="7">No bookings yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

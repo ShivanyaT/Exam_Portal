@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Student Dashboard</h2>
+
+<h5>Available examinations (booking open)</h5>
+<table class="table table-bordered">
+  <tr><th>Name</th><th>Type</th><th>Booking until</th><th></th></tr>
+  {% for e in exams %}
+  <tr>
+    <td>{{ e.name }}</td><td>{{ e.exam_type }}</td><td>{{ e.book_end }}</td>
+    <td><a class="btn btn-sm" href="{{ url_for('student.exam_detail', id=e.id) }}">View slots</a></td>
+  </tr>
+  {% else %}
+  <tr><td colspan="4">Nothing open for booking right now.</td></tr>
+  {% endfor %}
+</table>
+
+<h5>Available slots</h5>
+<table class="table table-bordered">
+  <tr><th>Exam</th><th>Date</th><th>Time</th><th>Seats left</th></tr>
+  {% for s in slots %}
+  <tr><td>{{ s.exam.name }}</td><td>{{ s.slot_date }}</td><td>{{ s.start_time }} - {{ s.end_time }}</td><td>{{ s.seats_left() }}</td></tr>
+  {% else %}
+  <tr><td colspan="4">No free slots.</td></tr>
+  {% endfor %}
+</table>
+
+<h5>Upcoming examinations</h5>
+<table class="table table-bordered">
+  <tr><th>Exam</th><th>Date</th><th>Time</th><th>Examiner</th></tr>
+  {% for b in upcoming %}
+  <tr><td>{{ b.exam.name }}</td><td>{{ b.slot.slot_date }}</td><td>{{ b.slot.start_time }} - {{ b.slot.end_time }}</td><td>{{ b.slot.examiner.name }}</td></tr>
+  {% else %}
+  <tr><td colspan="4">No upcoming examinations.</td></tr>
+  {% endfor %}
+</table>
+
+<h5>Published results</h5>
+<table class="table table-bordered">
+  <tr><th>Exam</th><th>Marks</th></tr>
+  {% for b in results %}
+  <tr><td>{{ b.exam.name }}</td><td>{{ b.total }} / {{ b.exam.max_marks }}</td></tr>
+  {% else %}
+  <tr><td colspan="2">No results published yet.</td></tr>
+  {% endfor %}
+</table>
+<a class="btn" href="{{ url_for('student.results') }}">See details</a>
+{% endblock %}

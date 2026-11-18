@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ 'Edit' if course else 'New' }} Course</h2>
+<form method="post" class="col-md-6">
+  <label>Course code</label>
+  <input class="form-control mb-2" name="code" value="{{ course.code if course }}" required>
+  <label>Course name</label>
+  <input class="form-control mb-2" name="name" value="{{ course.name if course }}" required>
+  <label>Description</label>
+  <input class="form-control mb-2" name="description" value="{{ course.description or '' if course }}">
+  <label>Status</label>
+  <select class="form-select mb-3" name="status">
+    {% for s in ['Active', 'Inactive'] %}
+    <option {{ 'selected' if course and course.status == s }}>{{ s }}</option>
+    {% endfor %}
+  </select>
+  <button class="btn">Save</button>
+  <a class="btn" href="{{ url_for('admin.courses') }}">Cancel</a>
+</form>
+{% endblock %}

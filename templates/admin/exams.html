@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Examinations</h2>
+<p><small>Status controls the timeline: <b>Slot Creation</b> = examiners can add slots,
+<b>Booking Open</b> = students can book, <b>Closed</b> = both closed,
+<b>Completed</b> = results visible to students.</small></p>
+<div class="table-responsive">
+<table class="table table-bordered">
+  <tr><th>ID</th><th>Course</th><th>Name</th><th>Type</th><th>Examiner</th><th>Marks</th>
+      <th>Slot creation</th><th>Booking</th><th>Status</th><th>Action</th></tr>
+  {% for e in exams %}
+  <tr>
+    <td>{{ e.id }}</td><td>{{ e.course.code }}</td><td>{{ e.name }}</td>
+    <td>{{ e.exam_type }} ({{ e.duration }} min)</td>
+    <td>{{ e.examiner.name if e.examiner else '-' }}</td><td>{{ e.max_marks }}</td>
+    <td>{{ e.slot_start }}<br>to {{ e.slot_end }}</td>
+    <td>{{ e.book_start }}<br>to {{ e.book_end }}</td>
+    <td>
+      <form method="post" action="{{ url_for('admin.exam_status', id=e.id) }}">
+        <select class="form-select form-select-sm mb-1" name="status">
+          {% for s in statuses %}<option {{ 'selected' if s == e.status }}>{{ s }}</option>{% endfor %}
+        </select>
+        <button class="btn btn-sm">Set</button>
+      </form>
+    </td>
+    <td>
+      <a class="btn btn-sm" href="{{ url_for('admin.exam_form', id=e.id) }}">Edit</a>
+      <a class="btn btn-sm" href="{{ url_for('admin.rubrics', id=e.id) }}">Rubrics</a>
+      <form method="post" action="{{ url_for('admin.exam_delete', id=e.id) }}" class="mt-1">
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="10">No examinations yet.</td></tr>
+  {% endfor %}
+</table>
+</div>
+<a class="btn" href="{{ url_for('admin.exam_form') }}">+ New Examination</a>
+{% endblock %}

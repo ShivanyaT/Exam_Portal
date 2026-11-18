@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Edit Profile</h2>
+<form method="post" class="col-md-6">
+  <label>Email (cannot be changed)</label>
+  <input class="form-control mb-2" value="{{ user.email }}" disabled>
+  <label>Full name</label>
+  <input class="form-control mb-2" name="name" value="{{ user.name }}" required>
+  <label>Phone</label>
+  <input class="form-control mb-2" name="phone" value="{{ user.phone or '' }}" pattern="[0-9]{10}" title="10 digit number">
+  <label>Department</label>
+  <input class="form-control mb-3" name="department" value="{{ user.department or '' }}">
+  <button class="btn">Update</button>
+</form>
+{% endblock %}

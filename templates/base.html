@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="only light">
+  <title>EMP - Examination Management Portal</title>
+  <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="window">
+
+  <div class="title-bar">
+    C:\EMP&gt; Examination Management Portal
+    {% if user_name %} &nbsp;[ {{ user_name }} - {{ role }} ]{% endif %}
+  </div>
+
+  {# Menu changes depending on who is logged in #}
+  {% if role %}
+  <div class="menu d-flex flex-wrap align-items-center">
+    <a href="{{ url_for(role + '.dashboard') }}">Home</a>
+
+    {% if role == 'admin' %}
+      <a href="{{ url_for('admin.courses') }}">Courses</a>
+      <a href="{{ url_for('admin.exams') }}">Examinations</a>
+      <a href="{{ url_for('admin.examiners') }}">Examiners</a>
+      <a href="{{ url_for('admin.students') }}">Students</a>
+      <a href="{{ url_for('admin.slots') }}">Slots</a>
+      <a href="{{ url_for('admin.bookings') }}">Bookings</a>
+      <form action="{{ url_for('admin.search') }}" class="d-flex ms-auto">
+        <input class="form-control form-control-sm" name="q" placeholder="Search name or ID" required>
+        <button class="btn btn-sm ms-1">Go</button>
+      </form>
+    {% elif role == 'student' %}
+      <a href="{{ url_for('student.exams') }}">Examinations</a>
+      <a href="{{ url_for('student.bookings') }}">My Bookings</a>
+      <a href="{{ url_for('student.results') }}">Results</a>
+      <a href="{{ url_for('student.profile') }}">Profile</a>
+    {% endif %}
+
+    <a class="{{ 'ms-3' if role == 'admin' else 'ms-auto' }}" href="{{ url_for('auth.logout') }}">[Logout]</a>
+  </div>
+  {% endif %}
+
+  <div class="window-body">
+    {% for message in get_flashed_messages() %}
+      <div class="alert">&gt; {{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </div>
+</div>
+</body>
+</html>

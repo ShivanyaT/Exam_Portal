@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Rubrics - {{ exam.name }}</h2>
+<p>Total of criteria marks: <b>{{ exam.rubrics|sum(attribute='max_marks') }}</b> / exam maximum: <b>{{ exam.max_marks }}</b></p>
+
+<table class="table table-bordered">
+  <tr><th>Criterion</th><th>Max marks</th><th>Weightage %</th><th>Description</th><th>Action</th></tr>
+  {% for r in exam.rubrics %}
+  {# A <form> cannot sit directly inside a table row, so the inputs point to it with form="..." #}
+  <tr>
+    <td><input form="r{{ r.id }}" class="form-control form-control-sm" name="name" value="{{ r.name }}" required></td>
+    <td><input form="r{{ r.id }}" class="form-control form-control-sm" type="number" min="1" name="max_marks" value="{{ r.max_marks }}" required></td>
+    <td><input form="r{{ r.id }}" class="form-control form-control-sm" type="number" min="0" max="100" name="weightage" value="{{ r.weightage }}"></td>
+    <td><input form="r{{ r.id }}" class="form-control form-control-sm" name="description" value="{{ r.description or '' }}"></td>
+    <td>
+      <form id="r{{ r.id }}" method="post" action="{{ url_for('admin.rubric_save', id=r.id) }}"></form>
+      <button form="r{{ r.id }}" class="btn btn-sm">Save</button>
+      <button form="r{{ r.id }}" class="btn btn-sm btn-danger" formaction="{{ url_for('admin.rubric_delete', id=r.id) }}">Delete</button>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="5">No criteria yet.</td></tr>
+  {% endfor %}
+</table>
+
+<h5>Add a criterion</h5>
+<form method="post" class="row g-2">
+  <div class="col-md-3"><input class="form-control" name="name" placeholder="Criterion name" required></div>
+  <div class="col-md-2"><input class="form-control" type="number" min="1" name="max_marks" placeholder="Max marks" required></div>
+  <div class="col-md-2"><input class="form-control" type="number" min="0" max="100" name="weightage" placeholder="Weightage %"></div>
+  <div class="col-md-3"><input class="form-control" name="description" placeholder="Description"></div>
+  <div class="col-md-2"><button class="btn">Add</button></div>
+</form>
+<a class="btn mt-3" href="{{ url_for('admin.exams') }}">Back</a>
+{% endblock %}

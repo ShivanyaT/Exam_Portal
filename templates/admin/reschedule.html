@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Reschedule Booking #{{ booking.id }}</h2>
+<p>{{ booking.student.name }} - {{ booking.exam.name }}<br>
+Now in slot #{{ booking.slot_id }} ({{ booking.slot.slot_date }} {{ booking.slot.start_time }})</p>
+
+<table class="table table-bordered">
+  <tr><th>Slot</th><th>Date</th><th>Time</th><th>Examiner</th><th>Seats left</th><th></th></tr>
+  {% for s in options %}
+  <tr>
+    <td>#{{ s.id }}</td><td>{{ s.slot_date }}</td><td>{{ s.start_time }} - {{ s.end_time }}</td>
+    <td>{{ s.examiner.name }}</td><td>{{ s.seats_left() }}</td>
+    <td>
+      <form method="post">
+        <button class="btn btn-sm" name="slot_id" value="{{ s.id }}">Move here</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="6">No other free slots for this examination.</td></tr>
+  {% endfor %}
+</table>
+<a class="btn" href="{{ url_for('admin.bookings') }}">Back</a>
+{% endblock %}

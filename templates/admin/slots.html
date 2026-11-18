@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>All Examination Slots</h2>
+<div class="table-responsive">
+<table class="table table-bordered">
+  <tr><th>ID</th><th>Exam</th><th>Date</th><th>Time</th><th>Seats left</th><th>Status</th><th>Examiner (change)</th></tr>
+  {% for s in slots %}
+  <tr>
+    <td>{{ s.id }}</td><td>{{ s.exam.name }}</td><td>{{ s.slot_date }}</td>
+    <td>{{ s.start_time }} - {{ s.end_time }}</td>
+    <td>{{ s.seats_left() }} / {{ s.capacity }}</td><td>{{ s.status }}</td>
+    <td>
+      <form method="post" action="{{ url_for('admin.slot_examiner', id=s.id) }}" class="d-flex gap-1">
+        <select class="form-select form-select-sm" name="examiner_id">
+          {% for u in examiners %}
+          <option value="{{ u.id }}" {{ 'selected' if u.id == s.examiner_id }}>{{ u.name }}</option>
+          {% endfor %}
+        </select>
+        <button class="btn btn-sm">Change</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="7">No slots yet.</td></tr>
+  {% endfor %}
+</table>
+</div>
+{% endblock %}

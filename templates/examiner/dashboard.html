@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Examiner Dashboard</h2>
+<div class="row g-3 mb-3">
+  <div class="col-4"><div class="stat"><div class="num">{{ slots|length }}</div>Slots created</div></div>
+  <div class="col-4"><div class="stat"><div class="num">{{ students_booked }}</div>Students booked</div></div>
+  <div class="col-4"><div class="stat"><div class="num">{{ pending }}</div>Pending evaluations</div></div>
+</div>
+
+<h5>My assigned examinations</h5>
+<table class="table table-bordered">
+  <tr><th>ID</th><th>Name</th><th>Type</th><th>Slot creation period</th><th>Status</th></tr>
+  {% for e in exams %}
+  <tr>
+    <td>{{ e.id }}</td><td>{{ e.name }}</td><td>{{ e.exam_type }}</td>
+    <td>{{ e.slot_start }} to {{ e.slot_end }}</td><td>{{ e.status }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="5">No examinations assigned to you yet.</td></tr>
+  {% endfor %}
+</table>
+
+<h5>My slots</h5>
+<table class="table table-bordered">
+  <tr><th>ID</th><th>Exam</th><th>Date</th><th>Time</th><th>Booked</th><th>Status</th><th>Action</th></tr>
+  {% for s in slots %}
+  <tr>
+    <td>{{ s.id }}</td><td>{{ s.exam.name }}</td><td>{{ s.slot_date }}</td>
+    <td>{{ s.start_time }} - {{ s.end_time }}</td><td>{{ s.booked() }} / {{ s.capacity }}</td>
+    <td>{{ s.status }}</td>
+    <td class="d-flex gap-1">
+      <a class="btn btn-sm" href="{{ url_for('examiner.slot_students', id=s.id) }}">Students</a>
+      {% if s.exam.status in editable %}
+      <a class="btn btn-sm" href="{{ url_for('examiner.slot_form', id=s.id) }}">Edit</a>
+      <form method="post" action="{{ url_for('examiner.slot_delete', id=s.id) }}">
+        <button class="btn btn-sm btn-danger">Remove</button>
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="7">No slots yet.</td></tr>
+  {% endfor %}
+</table>
+<a class="btn" href="{{ url_for('examiner.slot_form') }}">+ New Slot</a>
+{% endblock %}

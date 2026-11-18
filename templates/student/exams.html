@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Examinations</h2>
+
+{# Plain GET form: the search words and filter are sent in the URL and read by Flask #}
+<form class="row g-2 mb-3">
+  <div class="col-md-5"><input class="form-control" name="q" value="{{ q }}" placeholder="Search by exam or course"></div>
+  <div class="col-md-4">
+    <select class="form-select" name="type">
+      <option value="">All types</option>
+      {% for t in types %}<option {{ 'selected' if t == kind }}>{{ t }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3"><button class="btn">Search</button> <a class="btn" href="{{ url_for('student.exams') }}">Reset</a></div>
+</form>
+
+<table class="table table-bordered">
+  <tr><th>Course</th><th>Exam</th><th>Type</th><th>Duration</th><th>Marks</th><th>Booking period</th><th>Status</th><th></th></tr>
+  {% for e in exams %}
+  <tr>
+    <td>{{ e.course.code }}</td><td>{{ e.name }}</td><td>{{ e.exam_type }}</td>
+    <td>{{ e.duration }} min</td><td>{{ e.max_marks }}</td>
+    <td>{{ e.book_start }} to {{ e.book_end }}</td><td>{{ e.status }}</td>
+    <td><a class="btn btn-sm" href="{{ url_for('student.exam_detail', id=e.id) }}">Details</a></td>
+  </tr>
+  {% else %}
+  <tr><td colspan="8">No examinations found.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Published Results</h2>
+{% for b in results %}
+<div class="stat text-start mb-3">
+  <b>{{ b.exam.name }}</b> - {{ b.total }} / {{ b.exam.max_marks }}
+  <table class="table table-bordered mt-2">
+    <tr><th>Criterion</th><th>Marks</th></tr>
+    {% for s in b.scores %}
+    <tr><td>{{ s.rubric.name }}</td><td>{{ s.marks }} / {{ s.rubric.max_marks }}</td></tr>
+    {% endfor %}
+  </table>
+  Remarks: {{ b.remarks or '-' }}<br>
+  <a class="btn btn-sm mt-2" href="{{ url_for('student.scorecard', id=b.id) }}">Download scorecard</a>
+</div>
+{% else %}
+<p>No results have been published yet.</p>
+{% endfor %}
+{% endblock %}
